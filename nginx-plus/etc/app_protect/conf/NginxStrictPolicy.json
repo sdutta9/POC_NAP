@@ -1,0 +1,249 @@
+{
+    "policy" : {
+       "name" : "app_protect_strict_policy",
+       "description" : "NGINX App Protect Strict Policy",
+       "template": {
+         "name": "POLICY_TEMPLATE_NGINX_BASE"
+       },
+       "blocking-settings" : {
+          "evasions" : [
+             {
+                "description" : "Multiple decoding",
+                "maxDecodingPasses" : 2
+             }
+          ],
+          "http-protocols" : [
+             {
+                "description" : "Check maximum number of headers",
+                "maxHeaders" : 20
+             },
+             {
+                "description" : "Body in GET or HEAD requests",
+                "enabled" : true
+             },
+             {
+                "description" : "POST request with Content-Length: 0",
+                "enabled" : true
+             }
+          ],
+          "violations" : [
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Violation Rating Need Examination detected",
+                "name" : "VIOL_RATING_NEED_EXAMINATION"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Illegal HTTP status in response",
+                "name" : "VIOL_HTTP_RESPONSE_STATUS"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Modified ASM cookie",
+                "name" : "VIOL_ASM_COOKIE_MODIFIED"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Modified domain cookie(s)",
+                "name" : "VIOL_COOKIE_MODIFIED"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Illegal file type",
+                "name" : "VIOL_FILETYPE"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Illegal method",
+                "name" : "VIOL_METHOD"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Null in multi-part parameter value",
+                "name" : "VIOL_PARAMETER_MULTIPART_NULL_VALUE"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Failed to convert character",
+                "name" : "VIOL_ENCODING"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Evasion technique detected",
+                "name" : "VIOL_EVASION"
+             },
+             {
+                "alarm" : true,
+                "block" : true,
+                "description" : "Request length exceeds defined buffer size",
+                "name" : "VIOL_REQUEST_MAX_LENGTH"
+             }            
+          ]
+       },
+       "cookies" : [
+          {
+             "name" : "*",
+             "type" : "wildcard",
+             "enforcementType" : "allow",
+             "insertSameSiteAttribute" : "lax",
+             "securedOverHttpsConnection" : true
+          }
+       ],
+       "data-guard" : {
+          "enabled" : true,
+          "creditCardNumbers" : true,
+          "usSocialSecurityNumbers" : true,
+          "enforcementMode" : "ignore-urls-in-list",
+          "maskData" : true
+       },
+       "filetypes" : [
+          {
+             "name" : "*",
+             "type" : "wildcard",
+             "allowed" : true,
+             "responseCheck" : true
+          }
+       ],
+       "json-profiles" : [
+          {
+             "name" : "Default",
+             "defenseAttributes" : {
+                "tolerateJSONParsingWarnings" : false,
+                "maximumTotalLengthOfJSONData": "10000"               
+             },
+             "description" : "Default JSON Profile",
+             "handleJsonValuesAsParameters" : false
+          }
+       ],
+       "signature-sets" : [
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "CVE Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Buffer Overflow Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Authentication/Authorization Attack Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : true,
+             "name" : "High Accuracy Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "SQL Injection Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Cross Site Scripting Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "OS Command Injection Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "HTTP Response Splitting Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Path Traversal Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "XPath Injection Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Command Execution Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Server Side Code Injection Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Information Leakage Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Directory Indexing Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Remote File Include Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Predictable Resource Location Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Other Application Attacks Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "High Accuracy Detection Evasion Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : false,
+             "name" : "Generic Detection Signatures (High/Medium Accuracy)"
+          }
+       ],
+       "xml-profiles" : [
+          {
+             "name" : "Default",
+             "defenseAttributes" : {
+                "allowCDATA" : false,
+                "allowDTDs" : false,
+                "allowExternalReferences" : false,
+                "allowProcessingInstructions" : true,
+                "maximumAttributeValueLength" : 1024,
+                "maximumAttributesPerElement" : 16,
+                "maximumChildrenPerElement" : 1024,
+                "maximumDocumentDepth" : 32,
+                "maximumDocumentSize" : 1024000,
+                "maximumElements" : 65536,
+                "maximumNSDeclarations" : 64,
+                "maximumNameLength" : 256,
+                "maximumNamespaceLength" : 256,
+                "tolerateCloseTagShorthand" : false,
+                "tolerateLeadingWhiteSpace" : false,
+                "tolerateNumericNames" : false
+             }
+          }
+       ]
+    }
+ }
+ 

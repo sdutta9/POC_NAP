@@ -1,0 +1,78 @@
+version: '3.1'
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
+services:
+    # Damn Small Vulnerable Web
+    # https://github.com/stamparm/DSVW
+    datacenter1:
+        container_name: datacenter1
+        hostname: datacenter1
+        build: DSVW
+        ports:
+        - 8100:65412
+        restart: always # Will start container if running when a reboot occurs
+        networks:
+            mynetwork:
+                ipv4_address: 172.16.1.100
+    datacenter2:
+        container_name: datacenter2
+        hostname: datacenter2
+        build: DSVW
+        ports:
+        - 8200:65412
+        restart: always # Will start container if running when a reboot occurs
+        networks:
+            mynetwork:
+                ipv4_address: 172.16.1.200
+    nginx-plus:
+        container_name: nginx-plus
+        hostname: nginx-plus
+        networks:
+            mynetwork:
+                ipv4_address: 172.16.1.20
+        build: nginx-plus
+        volumes:
+            - ./nginx-plus/etc/nginx/conf.d:/etc/nginx/conf.d
+            # - ./nginx-plus/etc/nginx/stream.conf.d:/etc/nginx/stream.conf.d
+            - ./nginx-plus/etc/nginx/includes:/etc/nginx/includes
+            - ./nginx-plus/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx-plus/etc/ssl:/etc/ssl
+        ports:
+            - "80:80"    
+            - "443:443"
+            - "8080:8080"
+    elk:
+        image: sebp/elk:792
+        container_name: elk
+        hostname: elk
+        # mem_limit: 4g
+        expose:
+            - 5601
+            - 9200
+            - 5044
+            - 5145 # NGINX syslog
+            - 5144 # WAF logs
+        ports:
+            - "5601:5601"   # Do not map externally, we will use NGINX to proxy
+            # - "9200:9200"   # Do not map externally, we will use NGINX to proxy
+            # - "5044:5044"   # Do not map externally, we will use NGINX to proxy
+        volumes:
+          - ./elk/logstash/conf.d:/etc/logstash/conf.d
+          - ./elk/elasticsearch:/var/lib/elasticsearch #Persisting log data
+          - ./elk/kibana/kibana.yml:/opt/kibana/config/kibana.yml
+        #   - ./elk/logrorate:/etc/logrotate.d
+        healthcheck:
+            test: "wget -qO- http://localhost:5601 > /dev/null"
+            interval: 30s
+            timeout: 10s
+            retries: 10
+        networks:
+          mynetwork:
+              ipv4_address: 172.16.1.5
+              aliases: 
+                - kibana
+                - logstash
+                - elasticsearch

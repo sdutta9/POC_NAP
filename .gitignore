@@ -1,0 +1,10 @@
+# Cert and Keys
+nginx-repo.*
+# elk dbs
+elk/elasticsearch/*
+# Log files
+*.log
+# NGINX
+nginx-plus/var/cache/*
+# other
+.bak
