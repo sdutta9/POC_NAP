@@ -106,7 +106,7 @@ $> docker ps
                                                                                                                                                   
 CONTAINER ID   IMAGE                         COMMAND                  CREATED              STATUS                                 PORTS                                                              NAMES
 a68176aef1d3   POC_NAP_nginx-plus    "sh /entrypoint.sh"      About a minute ago   Up About a minute                      0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp, 0.0.0.0:8080->8080/tcp   nginx-plus
-4ff6a8e3357a   sebp/elk:792                  "/usr/local/bin/star…"   About a minute ago   Up About a minute (health: starting)   5044/tcp, 9200/tcp, 9300/tcp, 9600/tcp, 0.0.0.0:5601->5601/tcp     elk
+4ff6a8e3357a   sebp/elk:792          "/usr/local/bin/star…"   About a minute ago   Up About a minute (health: starting)   5044/tcp, 9200/tcp, 9300/tcp, 9600/tcp, 0.0.0.0:5601->5601/tcp     elk
 748727c5eb35   POC_NAP_datacenter2   "python3 dsvw.py"        About a minute ago   Up About a minute                      0.0.0.0:8200->65412/tcp                                            datacenter2
 d89fe72f0e56   POC_NAP_datacenter1   "python3 dsvw.py"        About a minute ago   Up About a minute                      0.0.0.0:8100->65412/tcp                                            datacenter1
 ```
