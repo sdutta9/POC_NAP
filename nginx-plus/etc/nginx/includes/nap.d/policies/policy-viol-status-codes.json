@@ -24,6 +24,20 @@
                 499,
                 413
             ]
+        },
+        "bot-defense": {
+            "settings": {
+                "isEnabled": true
+            },
+            "mitigations": {
+                "anomalies": [
+                    {
+                        "name": "Invalid HTTP Headers",
+                        "action": "block",
+                        "scoreThreshold": 110
+                    }
+                ]
+            }
         }
     }
 }
